@@ -56,7 +56,7 @@ io.on("connection", (socket) => {
       }
     }
   });
-  //for stall
+  //for stall /
   socket.on("requested list", (payload) => {
     stallId[payload.stall] = socket.id;
     stallSoIdToId[socket.id] = payload.stall;
