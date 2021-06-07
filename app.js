@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
       userSoIdToId[socket.id] = payload.user;
       userTimeStamp[payload.user] = payload.time;
 
-      requestList[payload.stall].push(payload.user);
+      requestList[payload.stall]?.push(payload.user);
 
       if (stallId[payload.stall]) {
         io.to(stallId[payload.stall]).emit("already exited stall owner", {
@@ -87,7 +87,7 @@ io.on("connection", (socket) => {
 
   socket.on("call reject", (payload) => {
     const { stallId, rejectedId } = payload;
-    const afterReject = requestList[stallId].filter((id) => id !== rejectedId);
+    const afterReject = requestList[stallId]?.filter((id) => id !== rejectedId);
     requestList[stallId] = afterReject;
     io.to(userId[rejectedId]).emit("stall reject to user", "data");
   });
@@ -125,7 +125,7 @@ io.on("connection", (socket) => {
     const { selfId } = payload;
     if (stallToConnect[selfId]) {
       //stall
-      const stillHave = requestList[selfId].filter(
+      const stillHave = requestList[selfId]?.filter(
         (id) => id !== stallToConnect[selfId]
       );
       requestList[selfId] = stillHave;
@@ -171,7 +171,7 @@ io.on("connection", (socket) => {
     // console.log(userWantToConnect[selfId]);
 
     if (userWantToConnect[selfId]) {
-      const exitUser = requestList[userWantToConnect[selfId]].filter(
+      const exitUser = requestList[userWantToConnect[selfId]]?.filter(
         (id) => id !== selfId
       );
       requestList[userWantToConnect[selfId]] = exitUser;
@@ -236,7 +236,7 @@ io.on("connection", (socket) => {
       if (userToConnect[userSoIdToId[socket.id]]) {
         const withdrawUser = requestList[
           userToConnect[userSoIdToId[socket.id]]
-        ].filter((id) => id !== userSoIdToId[socket.id]);
+        ]?.filter((id) => id !== userSoIdToId[socket.id]);
         requestList[userToConnect[userSoIdToId[socket.id]]] = withdrawUser;
         //request lit remove end
         // console.log(stallId[userToConnect[userSoIdToId[socket.id]]]);
@@ -254,7 +254,7 @@ io.on("connection", (socket) => {
         if (userWantToConnect[userSoIdToId[socket.id]]) {
           const exitRequest = requestList[
             userWantToConnect[userSoIdToId[socket.id]]
-          ].filter((id) => id !== userSoIdToId[socket.id]);
+          ]?.filter((id) => id !== userSoIdToId[socket.id]);
           requestList[userWantToConnect[userSoIdToId[socket.id]]] = exitRequest;
           io.to(stallId[userWantToConnect[userSoIdToId[socket.id]]]).emit(
             "remove user",
